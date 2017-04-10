@@ -1,4 +1,4 @@
-var ROWS, COLS, ENEMY_WIDTH, ENEMY_HEIGHT, game, player, bullets, shotDelay, nextShotAt, alienShotDelay, nextAlienShotAt, alienDelay, nextAlienMove, enemies, enemyBullets, invader, minX, maxX;
+var ROWS, COLS, ENEMY_WIDTH, ENEMY_HEIGHT, game, player, bullets, ship, alienShotDelay, nextAlienShotAt, alienDelay, nextAlienMove, invader;
 
 function setup() {
     var canvas = createCanvas(400, 600);
@@ -8,16 +8,7 @@ function setup() {
     ENEMY_WIDTH = 30;
     ENEMY_HEIGHT = 30;
 
-    bullets = [];
-    shotDelay = 500;
-    nextShotAt = 0;
-    alienShotDelay = 500;
-    nextAlienShotAt = 0;
-    alienDelay = 1000;
-    nextAlienMove = 0;
-    enemyBullets = [];
-    minX = width;
-    maxX = 0;
+    ship = loadImage('ship.png');
     invader = loadImage('invader.png');
     game = new Game();
     player = new Player();
@@ -27,9 +18,21 @@ function setup() {
 
 var draw = function() {
     background(0);
-    game.update();
-    player.draw();
-    player.fire();
+    if (!game.gameOver) {
+        game.update();
+    } else {
+        fill(255);
+        textSize(32);
+        textAlign(CENTER, CENTER);
+        text("GAME OVER", width / 2, height / 2 - 50);
+        text("Score: " + player.score, width / 2, height / 2 + 100);
+        text("Click to play again", width / 2, height / 2 + 150);
+    }
 
+}
 
+function mousePressed() {
+    if(game.gameOver) {
+        setup();    
+    }
 }

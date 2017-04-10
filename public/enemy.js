@@ -17,32 +17,41 @@ Enemy.prototype.update = function() {
 
 Enemy.prototype.fire = function() {
     this.loadBullet();
-    for (var i = 0; i < this.bullets.length; i++) {
+    for (var i = this.bullets.length - 1; i > 0; i--) {
         var eBullet = this.bullets[i];
         eBullet.draw();
         eBullet.pos.y += eBullet.velocity.y;
 
         if (eBullet.pos.y >= height) {
             this.bullets.splice(i, 1);
-            i--;
         }
 
         if (eBullet.playerHit()) {
             this.bullets.splice(i, 1);
-            i--;
             game.playerDeath();
         }
     }
 }
 
 
-Enemy.prototype.move = function(speed) {
+Enemy.prototype.move = function(speed, verticalMove) {
     if (speed) {
         this.speed = speed;
     }
-    this.pos.x += this.speed;
-    minX = Math.min(minX, this.pos.x);
-    maxX = Math.max(maxX, this.pos.x);
+    /*
+    // If vertical move is possible, then check which direction to set
+    */
+    if (verticalMove) {
+        if (this.speed > 0) {
+            this.pos.y += this.speed;
+        } else {
+            this.pos.y -= this.speed;
+        }
+    } else {
+        this.pos.x += this.speed;
+        game.minX = Math.min(game.minX, this.pos.x);
+        game.maxX = Math.max(game.maxX, this.pos.x);
+    }
 }
 
 Enemy.prototype.loadBullet = function() {

@@ -10,10 +10,12 @@ Bullet.prototype.draw = function() {
 }
 
 Bullet.prototype.playerHit = function() {
-    var d = p5.Vector.dist(this.pos, player.pos);
-    if (d < player.height) {
-        return true;
-    }
+    if (player.alive) {
+        var d = p5.Vector.dist(this.pos, player.pos);
+        if (d < player.height || d < player.width) {
+            return true;
+        }
+    } 
 }
 
 Bullet.prototype.enemyHit = function() {
@@ -24,6 +26,7 @@ Bullet.prototype.enemyHit = function() {
                 game.enemies[i].splice(y, 1);
                 y--;
                 player.bullets.splice(this, 1);
+                player.score += 10;
             }
         }
     }
