@@ -1,4 +1,4 @@
-var ROWS, COLS, ENEMY_WIDTH, ENEMY_HEIGHT, game, player, bullets, ship, alienShotDelay, nextAlienShotAt, alienDelay, nextAlienMove, invader;
+var ROWS, COLS, ENEMY_WIDTH, ENEMY_HEIGHT, game, player, bullets, ship, invader;
 
 function setup() {
     var canvas = createCanvas(400, 600);
@@ -10,9 +10,12 @@ function setup() {
 
     ship = loadImage('ship.png');
     invader = loadImage('invader.png');
-    game = new Game();
+    game = new Game(600, 700);
     player = new Player();
 
+}
+
+function reset(difficulty) {
 }
 
 
@@ -33,6 +36,6 @@ var draw = function() {
 
 function mousePressed() {
     if(game.gameOver) {
-        setup();    
+        setup();
     }
 }

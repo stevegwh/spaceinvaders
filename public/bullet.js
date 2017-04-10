@@ -15,7 +15,7 @@ Bullet.prototype.playerHit = function() {
         if (d < player.height || d < player.width) {
             return true;
         }
-    } 
+    }
 }
 
 Bullet.prototype.enemyHit = function() {
@@ -26,6 +26,7 @@ Bullet.prototype.enemyHit = function() {
                 game.enemies[i].splice(y, 1);
                 y--;
                 player.bullets.splice(this, 1);
+                game.enemiesLeft--;
                 player.score += 10;
             }
         }

@@ -4,7 +4,7 @@ var Player = function() {
     this.height = 20;
     this.width = 30;
     this.bullets = [];
-    this.shotDelay = 500;
+    this.shotDelay = 300;
     this.nextShotAt = 0;
     this.lives = 3;
     this.score = 0;
@@ -28,12 +28,16 @@ Player.prototype.fire = function() {
 
     //draws each bullet and checks to see if they are hitting an enemy
     for (var i = this.bullets.length - 1; i > 0; i--) {
-        this.bullets[i].draw();
-        this.bullets[i].enemyHit();
-        this.bullets[i].pos.y -= this.bullets[i].velocity.y;
+        if(this.bullets[i] !== undefined) {
+            this.bullets[i].pos.y -= this.bullets[i].velocity.y;
+        }
+
         if (this.bullets[i].pos.y <= 0 || this.bullets[i] > height) {
             this.bullets.splice(i, 1);
         }
+
+        this.bullets[i].draw();
+        this.bullets[i].enemyHit();
     }
     // checks to see if its time to shoot another shot
     if (this.nextShotAt > millis()) {
