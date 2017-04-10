@@ -1,4 +1,6 @@
-var Game = function(currentAlienDelay, currentShotDelay) {
+var Game = function(currentAlienDelay, currentShotDelay, level) {
+    this.level = level;
+
     this.enemies = this.generateEnemies([]);
     this.minX = width;
     this.maxX = 0;
@@ -9,27 +11,12 @@ var Game = function(currentAlienDelay, currentShotDelay) {
     this.alienDelay = this.setAlienDelay(currentAlienDelay);
     this.nextAlienMove = 0;
 
+    this.levelStart = false;
     this.enemiesLeft = COLS * ROWS;
     this.gameOver = false;
-    console.log(this.alienDelay)
 
 }
 
-Game.prototype.setAlienDelay = function(currentAlienDelay) {
-    if(currentAlienDelay > 300) {
-        return currentAlienDelay - 100;
-    } else {
-        return 100;
-    }
-}
-
-Game.prototype.setShotDelay = function(currentShotDelay) {
-    if(currentShotDelay > 200) {
-        return currentShotDelay - 100;
-    } else {
-        return 100;
-    }
-}
 
 Game.prototype.update = function() {
 
@@ -65,7 +52,7 @@ Game.prototype.update = function() {
                 this.enemies[i][j].update();
             }
         } else {
-            this.nextLevel();
+            this.levelStart = true; //start new level
         }
 
     }
@@ -103,7 +90,7 @@ Game.prototype.playerDeath = function() {
 }
 
 Game.prototype.hud = function() {
-
+    textAlign(LEFT, LEFT);
     fill(255);
     textSize(16);
     text("score: " + player.score, 10, height - 5);
@@ -112,9 +99,9 @@ Game.prototype.hud = function() {
 
 Game.prototype.nextLevel = function() {
     this.killBullets();
-
     player.lives = 3;
-    game = new Game(this.alienDelay, this.alienShotDelay);
+    this.level++;
+    game = new Game(this.alienDelay, this.alienShotDelay, this.level);
 
 }
 
@@ -125,5 +112,21 @@ Game.prototype.killBullets = function() {
 
     for (var x = this.enemies.length - 1; x > 0; x--) {
         this.enemies[x].bullets = [];
+    }
+}
+
+Game.prototype.setAlienDelay = function(currentAlienDelay) {
+    if(currentAlienDelay > 300) {
+        return currentAlienDelay - 100;
+    } else {
+        return 100;
+    }
+}
+
+Game.prototype.setShotDelay = function(currentShotDelay) {
+    if(currentShotDelay > 200) {
+        return currentShotDelay - 100;
+    } else {
+        return 100;
     }
 }
