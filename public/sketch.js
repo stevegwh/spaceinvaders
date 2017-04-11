@@ -1,4 +1,4 @@
-var ROWS, COLS, ENEMY_WIDTH, ENEMY_HEIGHT, game, player, bullets, ship, invader, invader2,  ufo, started, messageDelay;
+var ROWS, COLS, ENEMY_WIDTH, ENEMY_HEIGHT, game, player, bullets, barrier, ship, invader, invader2, started, messageDelay;
 
 function setup() {
     started = false;
@@ -9,12 +9,12 @@ function setup() {
     ENEMY_WIDTH = 30;
     ENEMY_HEIGHT = 30;
     messageDelay = 30;
-
+    textFont('Courier New');
+    barrier = loadImage('assets/barrier.png');
     ship = loadImage('assets/ship.png');
     invader = loadImage('assets/invader.png');
     invader2 = loadImage('assets/invader2-test.jpg');
-    ufo = loadImage('assets/ufo.png');
-    game = new Game(500, 2);
+    game = new Game(1000, 2);
     player = new Player();
 
 }
@@ -22,7 +22,6 @@ function setup() {
 
 var draw = function() {
     background(0);
-    //image(ufo, this.pos.x, this.pos.y, this.width, this.height);
     if (!started) {
         fill(255);
         textSize(32);

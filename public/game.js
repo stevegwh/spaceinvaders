@@ -25,8 +25,7 @@ Game.prototype.update = function() {
     this.drawObstacles();
     player.update();
     this.hud();
-
-    //Handles enemies movement
+    //Handles when to move the enemies
     var isNeedToMove = this.nextAlienMove <= millis();
     if (isNeedToMove) {
         var speed;
@@ -46,13 +45,17 @@ Game.prototype.update = function() {
 
 
     for (var i = 0; i < this.enemies.length; i++) {
+
+        //speed up enemies the fewer there are
         if(this.enemiesLeft < 15 && this.speedHasChanged === 0) {
-            this.alienDelay <= 200 ? this.alienDelay -= 50 : this.alienDelay -= 100;
+            this.alienDelay <= 200 ? this.alienDelay -= 50 : this.alienDelay -= this.alienDelay -= 100;
             this.speedHasChanged++;
         } else if (this.enemiesLeft < 5 && this.speedHasChanged === 1) {
             this.alienDelay <= 200 ?this.alienDelay -= 50 : this.alienDelay -= 100;
             this.speedHasChanged++;
         }
+
+        //move or end level
         if(this.enemiesLeft > 0) {
             for (var j = 0; j < this.enemies[i].length; j++) {
                 // if time to move, then move
@@ -120,7 +123,7 @@ Game.prototype.hud = function() {
     fill(255);
     textSize(16);
     text("score: " + player.score, 10, 15);
-    text("lives: " + player.lives, width - 68, 15);
+    text("lives: " + player.lives, width - 90, 15);
 }
 
 Game.prototype.nextLevel = function() {
@@ -143,10 +146,10 @@ Game.prototype.killBullets = function() {
 }
 
 Game.prototype.setAlienDelay = function(currentAlienDelay) {
-    if(currentAlienDelay > 200) {
-        return currentAlienDelay - 150;
+    if(currentAlienDelay > 250) {
+        return currentAlienDelay - 100;
     } else {
-        return 20;
+        return 250;
     }
 }
 
@@ -154,7 +157,7 @@ Game.prototype.drawObstacles = function() {
     for(var i = 0; i < this.obstacles.length; i++) {
         if(this.obstacles[i].life > 0) {
             fill(50, 255, 50);
-            rect(this.obstacles[i].pos.x, this.obstacles[i].pos.y - (this.obstacles[i].life * 10), this.obstacles[i].width , this.obstacles[i].height * this.obstacles[i].life);
+            image(barrier, this.obstacles[i].pos.x, this.obstacles[i].pos.y - (this.obstacles[i].life * 10), this.obstacles[i].width , this.obstacles[i].height * this.obstacles[i].life);
         }
     }
 }
