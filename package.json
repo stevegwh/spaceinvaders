@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wheelsofsteel/p5game.git"
+    "url": "git+https://github.com/wheelsofsteel/spaceinvaders"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/wheelsofsteel/p5game/issues"
+    "url": "https://github.com/wheelsofsteel/spaceinvaders/issues"
   },
-  "homepage": "https://github.com/wheelsofsteel/p5game#readme",
+  "homepage": "https://github.com/wheelsofsteel/spaceinvaders#readme",
   "dependencies": {
     "express": "^4.15.2",
     "nodemon": "^1.11.0"
