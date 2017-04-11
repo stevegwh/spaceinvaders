@@ -1,14 +1,16 @@
-var Game = function(currentAlienDelay, currentShotDelay, level) {
+var Game = function(currentAlienDelay, level) {
     this.level = level;
 
     this.enemies = this.generateEnemies([]);
+    this.obstacles = this.generateObstacles([]);
     this.minX = width;
     this.maxX = 0;
     this.verticalMove = false;
 
-    this.alienShotDelay = this.setShotDelay(currentShotDelay);
-    this.nextAlienShotAt = 0;
+    this.difficulty = level/50;
+
     this.alienDelay = this.setAlienDelay(currentAlienDelay);
+    this.speedHasChanged = 0;
     this.nextAlienMove = 0;
 
     this.levelStart = false;
@@ -19,10 +21,12 @@ var Game = function(currentAlienDelay, currentShotDelay, level) {
 
 
 Game.prototype.update = function() {
-
+    messageDelay = 30;
+    this.drawObstacles();
     player.update();
     this.hud();
 
+    //Handles enemies movement
     var isNeedToMove = this.nextAlienMove <= millis();
     if (isNeedToMove) {
         var speed;
@@ -42,6 +46,13 @@ Game.prototype.update = function() {
 
 
     for (var i = 0; i < this.enemies.length; i++) {
+        if(this.enemiesLeft < 15 && this.speedHasChanged === 0) {
+            this.alienDelay <= 200 ? this.alienDelay -= 50 : this.alienDelay -= 100;
+            this.speedHasChanged++;
+        } else if (this.enemiesLeft < 5 && this.speedHasChanged === 1) {
+            this.alienDelay <= 200 ?this.alienDelay -= 50 : this.alienDelay -= 100;
+            this.speedHasChanged++;
+        }
         if(this.enemiesLeft > 0) {
             for (var j = 0; j < this.enemies[i].length; j++) {
                 // if time to move, then move
@@ -69,11 +80,26 @@ Game.prototype.generateEnemies = function(enemies) {
     for (var i = 0; i < ROWS; i++) {
         var newRow = [];
         for (var y = 0; y < COLS; y++) {
-            newRow.push(new Enemy(y * 40 + 40, i * 30));
+            var randNo = random(0,2);
+            var type;
+            if(randNo > 1) {
+                type = invader
+            } else {
+                type = invader2
+            }
+            newRow.push(new Enemy(y * 40 + 40, 40 + i * 35, type));
         }
         enemies.push(newRow);
     }
     return enemies;
+}
+
+Game.prototype.generateObstacles = function(obstacles) {
+
+    obstacles.push(new Obstacle(75, height - 100))
+    obstacles.push(new Obstacle(width-150, height - 100))
+
+    return obstacles;
 }
 
 Game.prototype.playerDeath = function() {
@@ -93,15 +119,16 @@ Game.prototype.hud = function() {
     textAlign(LEFT, LEFT);
     fill(255);
     textSize(16);
-    text("score: " + player.score, 10, height - 5);
-    text("lives: " + player.lives, width - 68, height - 5);
+    text("score: " + player.score, 10, 15);
+    text("lives: " + player.lives, width - 68, 15);
 }
 
 Game.prototype.nextLevel = function() {
     this.killBullets();
     player.lives = 3;
     this.level++;
-    game = new Game(this.alienDelay, this.alienShotDelay, this.level);
+    this.alienDelay += 200;
+    game = new Game(this.alienDelay, this.level);
 
 }
 
@@ -116,17 +143,18 @@ Game.prototype.killBullets = function() {
 }
 
 Game.prototype.setAlienDelay = function(currentAlienDelay) {
-    if(currentAlienDelay > 300) {
-        return currentAlienDelay - 100;
+    if(currentAlienDelay > 200) {
+        return currentAlienDelay - 150;
     } else {
-        return 100;
+        return 20;
     }
 }
 
-Game.prototype.setShotDelay = function(currentShotDelay) {
-    if(currentShotDelay > 200) {
-        return currentShotDelay - 100;
-    } else {
-        return 100;
+Game.prototype.drawObstacles = function() {
+    for(var i = 0; i < this.obstacles.length; i++) {
+        if(this.obstacles[i].life > 0) {
+            fill(50, 255, 50);
+            rect(this.obstacles[i].pos.x, this.obstacles[i].pos.y - (this.obstacles[i].life * 10), this.obstacles[i].width , this.obstacles[i].height * this.obstacles[i].life);
+        }
     }
 }

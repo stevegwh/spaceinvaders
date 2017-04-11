@@ -29,6 +29,7 @@ Player.prototype.fire = function() {
     //draws each bullet and checks to see if they are hitting an enemy
     for (var i = this.bullets.length - 1; i > 0; i--) {
         if(this.bullets[i] !== undefined) {
+            this.bullets[i].velocity.y += this.bullets[i].acceleration;
             this.bullets[i].pos.y -= this.bullets[i].velocity.y;
         }
 
@@ -36,15 +37,20 @@ Player.prototype.fire = function() {
             this.bullets.splice(i, 1);
         }
 
+        if(this.bullets[i].obstacleHit()) {
+            this.bullets.splice(i, 1);
+        }
+
         this.bullets[i].draw();
         this.bullets[i].enemyHit();
+
     }
     // checks to see if its time to shoot another shot
     if (this.nextShotAt > millis()) {
         return;
     }
     this.nextShotAt = millis() + this.shotDelay;
-    this.bullets.push(new Bullet(this.pos.x + this.width / 2, this.pos.y - this.height / 2));
+    this.bullets.push(new Bullet(this.pos.x + this.width / 2, this.pos.y - this.height / 2, "player"));
 }
 
 Player.prototype.hitAnimation = function(maxRange) {
