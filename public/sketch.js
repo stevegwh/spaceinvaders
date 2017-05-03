@@ -2,7 +2,7 @@ var ROWS, COLS, ENEMY_WIDTH, ENEMY_HEIGHT, game, player, bullets, barrier, ship,
 
 function setup() {
     started = false;
-    var canvas = createCanvas(displayWidth/5, displayHeight/2);
+    var canvas = createCanvas(400, 620);
     canvas.parent("sketch");
     ROWS = 5;
     COLS = 8;
